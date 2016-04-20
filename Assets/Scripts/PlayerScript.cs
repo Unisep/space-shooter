@@ -7,6 +7,7 @@ public class PlayerScript : MonoBehaviour
 	public GameObject prefExplosaoPlayer;
 	public GameObject prefabLaser;
 
+	private ControleVidaScript vida;
 	private BoxCollider2D screenLimit;
 	private GameObject lancadorLaser;
 	private Rigidbody2D body;
@@ -24,6 +25,7 @@ public class PlayerScript : MonoBehaviour
 		somTiro = GetComponent<AudioSource> ();
 
 		lancadorLaser = GameObject.FindGameObjectWithTag ("Lancador");
+		vida = GetComponent<ControleVidaScript> ();
 	}
 
 	void Update ()
@@ -51,12 +53,21 @@ public class PlayerScript : MonoBehaviour
 
 	void OnCollisionEnter2D (Collision2D col)
 	{
-		if (col.gameObject.CompareTag ("Meteoro")) {			
-			Destroy (gameObject);
-			Destroy (col.gameObject);
+		if (col.gameObject.CompareTag ("Meteoro")) {
+			DestroyEnemy (col.gameObject);
 
-			Instantiate (prefExplosaoMeteoro, col.gameObject.transform.position, col.gameObject.transform.rotation);
-			Instantiate (prefExplosaoPlayer, transform.position, transform.rotation);
+			if (vida.hasRemaining ()) {
+				vida.DecreaseOne ();
+			} else {
+				Destroy (gameObject);
+				Instantiate (prefExplosaoPlayer, transform.position, transform.rotation);	
+			}
 		}
+	}
+
+	void DestroyEnemy (GameObject enemy)
+	{
+		Destroy (enemy);
+		Instantiate (prefExplosaoMeteoro, enemy.transform.position, enemy.transform.rotation);
 	}
 }
