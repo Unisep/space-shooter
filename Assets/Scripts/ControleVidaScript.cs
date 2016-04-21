@@ -15,10 +15,6 @@ public class ControleVidaScript : MonoBehaviour
 		updateTextView ();
 	}
 
-	void Update ()
-	{
-	}
-
 	public void DecreaseOne ()
 	{
 		vidasRestantes -= 1;
@@ -26,9 +22,9 @@ public class ControleVidaScript : MonoBehaviour
 		updateTextView ();
 	}
 
-	public bool hasRemaining ()
+	public bool lastLife ()
 	{
-		return vidasRestantes > 0;
+		return vidasRestantes == 0;
 	}
 
 	void updateTextView ()
