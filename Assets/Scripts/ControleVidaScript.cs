@@ -6,7 +6,7 @@ public class ControleVidaScript : MonoBehaviour
 {
 	public Text txtVidas;
 
-	private int totalVidas = 2;
+	private int totalVidas = 5;
 	private int vidasRestantes;
 
 	void Start ()
