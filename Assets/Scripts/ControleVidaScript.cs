@@ -6,7 +6,7 @@ public class ControleVidaScript : MonoBehaviour
 {
 	public Text txtVidas;
 
-	private int totalVidas = 5;
+	public int totalVidas = 5;
 	private int vidasRestantes;
 
 	void Start ()
@@ -22,6 +22,13 @@ public class ControleVidaScript : MonoBehaviour
 		updateTextView ();
 	}
 
+	public void Kill ()
+	{
+		vidasRestantes = 0;
+
+		updateTextView ();
+	}
+
 	public bool lastLife ()
 	{
 		return vidasRestantes == 0;
@@ -29,6 +36,7 @@ public class ControleVidaScript : MonoBehaviour
 
 	void updateTextView ()
 	{
-		txtVidas.text = vidasRestantes.ToString ("00");
+		if (txtVidas != null)
+			txtVidas.text = vidasRestantes.ToString ("00");
 	}
 }

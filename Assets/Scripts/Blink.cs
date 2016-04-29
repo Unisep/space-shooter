@@ -6,8 +6,10 @@ public class Blink : MonoBehaviour
 {
 	private SpriteRenderer imageToToggle;
 
-	private float interval = 0.14f;
-	private float startDelay = 0f;
+	public float interval = 0.14f;
+	public float startDelay = 0f;
+	public int duration = 3;
+
 	public bool currentState = true;
 	public bool defaultState = true;
 	bool isBlinking = false;
@@ -26,7 +28,7 @@ public class Blink : MonoBehaviour
 		if (imageToToggle != null) {
 			isBlinking = true;
 
-			StartCoroutine (Routinee ());
+			StartCoroutine (JustBlink ());
 		}
 	}
 
@@ -35,10 +37,10 @@ public class Blink : MonoBehaviour
 		imageToToggle.enabled = !imageToToggle.enabled;
 	}
 
-	public IEnumerator Routinee ()
+	public IEnumerator JustBlink ()
 	{
 		InvokeRepeating ("ToggleState", startDelay, interval);
-		yield return new WaitForSeconds (3);
+		yield return new WaitForSeconds (duration);
 		StopBlink ();
 	}
 

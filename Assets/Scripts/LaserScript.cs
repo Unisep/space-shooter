@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class LaserPlayerScript : MonoBehaviour
+public class LaserScript : MonoBehaviour
 {
 	public GameObject prefExplosaoMeteoro;
 
@@ -36,6 +36,21 @@ public class LaserPlayerScript : MonoBehaviour
 
 			controleScore.updateScore (10);
 
+			Destroy (col.gameObject);
+			Destroy (gameObject);
+		} else if (col.gameObject.CompareTag ("GreenEnemy")) {
+			ControleVidaScript vida = col.gameObject.GetComponent<ControleVidaScript> ();
+
+			Destroy (gameObject);
+
+			if (vida.lastLife ()) {
+				Destroy (col.gameObject);	
+
+				controleScore.updateScore (30);
+			} else {
+				vida.DecreaseOne ();
+			}
+		} else if (col.gameObject.CompareTag ("LaserEnemy")) {
 			Destroy (col.gameObject);
 			Destroy (gameObject);
 		}

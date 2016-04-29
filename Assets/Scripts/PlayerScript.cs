@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerScript : MonoBehaviour
 {
 	public GameObject prefExplosaoMeteoro;
+	public GameObject prefExplosaoEnemy;
 	public GameObject prefExplosaoPlayer;
 	public GameObject prefabLaser;
 
@@ -60,28 +61,41 @@ public class PlayerScript : MonoBehaviour
 		}
 	}
 
-	void OnCollisionEnter2D (Collision2D col)
+	void OnTriggerEnter2D (Collider2D col)
 	{
-		if (col.gameObject.CompareTag ("Meteoro")) {
-			DestroyEnemy (col.gameObject);
+		bool isAsteroid = col.gameObject.CompareTag ("Meteoro");
+		bool isEnemyLaser = col.gameObject.CompareTag ("LaserEnemy");
+		bool isEnemy = col.gameObject.CompareTag ("GreenEnemy");
+			
+		if (isAsteroid || isEnemyLaser) {
+			DestroyEnemy (col.gameObject, isAsteroid, isEnemyLaser, isEnemy);
 
 			vida.DecreaseOne ();
 
-			if (vida.lastLife ()) {
-				Destroy (gameObject);
-				Instantiate (prefExplosaoPlayer, transform.position, transform.rotation);	
-			} else {
+			if (vida.lastLife ())
+				DestroyMySelf ();
+			else
 				StartBlink ();
+			
+		} else if (isEnemy) {
+			vida.Kill ();
 
-				//StopBlink ();
-			}
+			DestroyEnemy (col.gameObject, isAsteroid, isEnemyLaser, isEnemy);
+			DestroyMySelf ();
 		}
 	}
 
-	void DestroyEnemy (GameObject enemy)
+	void DestroyEnemy (GameObject enemy, bool isAsteroid, bool isEnemyLaser, bool isEnemy)
 	{
+		GameObject prefabExplosao = null;
+
+		if (isAsteroid)
+			prefabExplosao = prefExplosaoMeteoro;
+		else if (isEnemyLaser || isEnemy)
+			prefabExplosao = prefExplosaoEnemy;
+
 		Destroy (enemy);
-		Instantiate (prefExplosaoMeteoro, enemy.transform.position, enemy.transform.rotation);
+		Instantiate (prefabExplosao, enemy.transform.position, enemy.transform.rotation);
 	}
 
 	void StartBlink ()
@@ -92,11 +106,9 @@ public class PlayerScript : MonoBehaviour
 		ship.StartBlink ();
 	}
 
-	//void StopBlink ()
-	//{
-	//	turbinaEsq.StopBlink ();
-	//		turbinaDir.StopBlink ();
-	//
-	//	ship.StopBlink ();
-	//}
+	void DestroyMySelf ()
+	{
+		Destroy (gameObject);
+		Instantiate (prefExplosaoPlayer, transform.position, transform.rotation);
+	}
 }
