@@ -15,6 +15,7 @@ public class PlayerScript : MonoBehaviour
 	private BoxCollider2D screenLimit;
 	private GameObject lancadorLaser;
 	private Rigidbody2D body;
+	private Vector2 origin;
 	private float direction;
 
 	private AudioSource somTiro;
@@ -31,6 +32,7 @@ public class PlayerScript : MonoBehaviour
 
 		direction = 0;
 		body = GetComponent<Rigidbody2D> ();
+		origin = body.position;
 		somTiro = GetComponent<AudioSource> ();
 
 		lancadorLaser = GameObject.FindGameObjectWithTag ("Lancador");
@@ -48,7 +50,12 @@ public class PlayerScript : MonoBehaviour
 			} else {
 				ControleJogoScript.IniciarJogo ();
 			}
-		}
+		} else if(Input.GetKeyDown (KeyCode.R) && !ControleJogoScript.Iniciado) {
+			ControleJogoScript.ReiniciarJogo ();
+			TogglePLayerFromScreen();
+			vida.Reset();
+			body.position = origin;
+		} 
 	}
 
 	void FixedUpdate ()
@@ -68,12 +75,12 @@ public class PlayerScript : MonoBehaviour
 			vida.DecreaseOne ();
 
 			if (vida.lastLife ()) {
-				Destroy (gameObject);
-				Instantiate (prefExplosaoPlayer, transform.position, transform.rotation);	
+				// Destroy (gameObject);
+				TogglePLayerFromScreen();
+				Instantiate (prefExplosaoPlayer, transform.position, transform.rotation);
+				ControleJogoScript.TerminarJogo();
 			} else {
 				StartBlink ();
-
-				//StopBlink ();
 			}
 		}
 	}
@@ -92,11 +99,11 @@ public class PlayerScript : MonoBehaviour
 		ship.StartBlink ();
 	}
 
-	//void StopBlink ()
-	//{
-	//	turbinaEsq.StopBlink ();
-	//		turbinaDir.StopBlink ();
-	//
-	//	ship.StopBlink ();
-	//}
+	void TogglePLayerFromScreen ()
+	{
+		turbinaEsq.ToggleState ();
+		turbinaDir.ToggleState ();
+	
+		ship.ToggleState();
+	}
 }

@@ -6,12 +6,15 @@ public class ControleJogoScript : MonoBehaviour
 	public static bool Iniciado = false;
 
 	private static GameObject cnvJogo;
-	private ControleVidaScript controleVida;
+	private static GameObject cnvFim;
 
 	static ControleJogoScript ()
 	{
 		cnvJogo = GameObject.FindGameObjectWithTag ("CanvasJogo");
 		cnvJogo.SetActive (false);
+
+		cnvFim = GameObject.FindGameObjectWithTag ("CanvasFim");
+		cnvFim.SetActive (false);
 	}
 
 	public static void IniciarJogo ()
@@ -27,9 +30,16 @@ public class ControleJogoScript : MonoBehaviour
 	{
 		Iniciado = false;
 
-		GameObject cnvFim = GameObject.FindGameObjectWithTag ("CanvasFim");
-		cnvFim.SetActive (false);
+		cnvJogo.SetActive (false);
 		cnvFim.SetActive (true);
-		}
 	}
+
+	public static void ReiniciarJogo()
+	{
+		Iniciado = true;
+
+		cnvJogo.SetActive (true);
+		cnvFim.SetActive (false);
+	}
+}
 	
