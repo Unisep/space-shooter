@@ -16,13 +16,6 @@ public class InimigoAzul : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		body.velocity = velocidade * Time.deltaTime; 
-	}// Use this for initialization
-	void Start () {
-	
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }
