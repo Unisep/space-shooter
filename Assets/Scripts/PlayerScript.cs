@@ -16,7 +16,9 @@ public class PlayerScript : MonoBehaviour
 	private BoxCollider2D screenLimit;
 	private GameObject lancadorLaser;
 	private Rigidbody2D body;
+	private Vector2 origin;
 	private float direction;
+	private bool Dead = false;
 
 	private AudioSource somTiro;
 
@@ -32,6 +34,7 @@ public class PlayerScript : MonoBehaviour
 
 		direction = 0;
 		body = GetComponent<Rigidbody2D> ();
+		origin = body.position;
 		somTiro = GetComponent<AudioSource> ();
 
 		lancadorLaser = GameObject.FindGameObjectWithTag ("Lancador");
@@ -42,7 +45,14 @@ public class PlayerScript : MonoBehaviour
 	{
 		direction = Input.GetAxis ("Horizontal");
 
-		if (Input.GetButtonDown ("Fire1")) {
+		if (Input.GetKeyDown (KeyCode.R) && !ControleJogoScript.Iniciado) {
+			ControleJogoScript.ReiniciarJogo ();
+			TogglePLayerFromScreen ();
+			vida.Reset ();
+			gameObject.GetComponent<ControleScoreScript> ().clearScore ();
+			body.position = origin;
+			Dead = false;
+		} else if (!Dead && Input.GetButtonDown ("Fire1")) {
 			if (ControleJogoScript.Iniciado) {
 				Instantiate (prefabLaser, lancadorLaser.transform.position, lancadorLaser.transform.rotation);
 				somTiro.Play ();
@@ -108,7 +118,18 @@ public class PlayerScript : MonoBehaviour
 
 	void DestroyMySelf ()
 	{
-		Destroy (gameObject);
+		Dead = true;
+		TogglePLayerFromScreen ();
 		Instantiate (prefExplosaoPlayer, transform.position, transform.rotation);
+
+		ControleJogoScript.TerminarJogo (gameObject.GetComponent<ControleScoreScript> ().lblScore.text);
+	}
+
+	void TogglePLayerFromScreen ()
+	{
+		turbinaEsq.ToggleState ();
+		turbinaDir.ToggleState ();
+	
+		ship.ToggleState ();
 	}
 }

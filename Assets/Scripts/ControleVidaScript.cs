@@ -15,6 +15,10 @@ public class ControleVidaScript : MonoBehaviour
 		updateTextView ();
 	}
 
+	public void Reset(){
+		Start();
+	}
+
 	public void DecreaseOne ()
 	{
 		vidasRestantes -= 1;

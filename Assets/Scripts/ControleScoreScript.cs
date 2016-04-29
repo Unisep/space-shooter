@@ -44,7 +44,13 @@ public class ControleScoreScript : MonoBehaviour
 
 	public void updateScore (int pontos)
 	{
-		score = score + pontos;
+		score += pontos;
 		lblScore.text = score.ToString ();
+	}
+
+	public void clearScore ()
+	{
+		score = 0;
+		lblScore.text = "0";
 	}
 }
